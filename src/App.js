@@ -10,7 +10,7 @@ import ForthTab from './Components/ForthTab'
 function App() {
 
    //FirstTab
-   const [headerText, setHeaderText] = useState(' ')
+   const [headerText, setHeaderText] = useState('')
    const [descriptionText, setDescription] = useState(' ')
    const [status, setStatus] = useState('Off')
   

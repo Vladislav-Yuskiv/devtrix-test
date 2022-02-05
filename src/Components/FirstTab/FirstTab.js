@@ -20,6 +20,15 @@ function FirstTab({headerText ,setHeaderText , descriptionText , setDescription 
     }
 
   }
+
+  const handleButtonClick = () => {
+
+    if (headerText.trim() === '') {
+      return alert('Header is requied')
+    }
+
+    nextButton()
+  }
   
   const handleChangeStatus = (e) => {
     if (status === 'Off') {
@@ -38,7 +47,7 @@ function FirstTab({headerText ,setHeaderText , descriptionText , setDescription 
       <FormGroup>
           <Label >
             Header
-            <Input className="mb-3" bsSize="sm" type="text" value={headerText} name="header"  onChange={handleChange}/>
+            <Input className="mb-3" bsSize="sm" type="text"  value={headerText} name="header"  onChange={handleChange}/>
           </Label>
       </FormGroup>
         
@@ -61,7 +70,7 @@ function FirstTab({headerText ,setHeaderText , descriptionText , setDescription 
           </Label>
       </FormGroup>
       
-             <Button color="primary" onClick={nextButton}>
+             <Button color="primary" onClick={handleButtonClick}>
                  Next
              </Button>
     </Form>

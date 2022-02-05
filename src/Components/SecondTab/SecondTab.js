@@ -5,6 +5,15 @@ import React from "react"
 
 function SecondTab({ email, setEmail, phone, setPhone, nextButton, prevButton }) {
     
+  const handleButtonClick = () => {
+
+    if (phone.trim() === '') {
+      return alert('Phone is requied')
+    }
+
+    nextButton()
+  }
+
      const handleChange = (e) => {
     const { name, value } = e.currentTarget;
     switch (name) {
@@ -57,7 +66,7 @@ function SecondTab({ email, setEmail, phone, setPhone, nextButton, prevButton })
                  Prev
             </Button>
             
-             <Button color="primary" onClick={nextButton}>
+             <Button color="primary" onClick={handleButtonClick}>
                  Next
             </Button>
             
