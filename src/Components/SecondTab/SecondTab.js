@@ -1,15 +1,31 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Form, Input, FormGroup, Label , Button } from 'reactstrap'
-import React from "react"
+import {  Input, FormGroup, Label , Button } from 'reactstrap'
+import { useSelector, useDispatch } from 'react-redux';
+import { getEmail , getPhone } from '../../redux/form/form-selectors'
+import formActions from '../../redux/form/form-actions'
+import React , {useState} from "react"
 
 
-function SecondTab({ email, setEmail, phone, setPhone, nextButton, prevButton }) {
+function SecondTab({  nextButton, prevButton }) {
+
+  const reduxEmail = useSelector(getEmail)
+  const reduxPhone = useSelector(getPhone)
+ 
+
+  const [email, setEmail] = useState(reduxEmail)
+  const [phone, setPhone] = useState(reduxPhone)
+
+
+  const dispatch = useDispatch();
     
   const handleButtonClick = () => {
 
     if (phone.trim() === '') {
       return alert('Phone is requied')
     }
+
+    dispatch(formActions.email(email))
+    dispatch(formActions.phone(phone))
 
     nextButton()
   }
@@ -31,7 +47,7 @@ function SecondTab({ email, setEmail, phone, setPhone, nextButton, prevButton })
   }
 
     return (
-        <Form>
+        <>
             <FormGroup>
                 <Label>
                     Email
@@ -70,7 +86,7 @@ function SecondTab({ email, setEmail, phone, setPhone, nextButton, prevButton })
                  Next
             </Button>
             
-        </Form>
+        </>
     )
 }
 export default SecondTab;

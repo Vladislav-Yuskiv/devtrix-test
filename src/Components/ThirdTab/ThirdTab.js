@@ -1,14 +1,31 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Form, Input, FormGroup ,Label, Button } from 'reactstrap'
+import {  Input, FormGroup ,Label, Button } from 'reactstrap'
+import React, { useState } from "react";
+import { useSelector, useDispatch } from 'react-redux';
+import { getPhotos } from '../../redux/form/form-selectors'
+import formActions from '../../redux/form/form-actions'
 
-function ThirdTab({ photos, setPhotos, nextButton, prevButton }) {
+function ThirdTab({ nextButton, prevButton }) {
+
+  const reduxPhotos = useSelector(getPhotos)
+
+  const [photos, setPhotos] = useState(reduxPhotos) 
+ 
+  const dispatch = useDispatch();
     
     const onChangeInput = (e) => {
         setPhotos([...photos , e.target.value])
     }
 
+    const onButtonNextCkick = (e) => {
+
+      dispatch(formActions.photos(photos))
+
+      nextButton()
+    }
+
     return (
-        <Form>
+        <>
     
           <FormGroup>
             <Label >
@@ -17,7 +34,7 @@ function ThirdTab({ photos, setPhotos, nextButton, prevButton }) {
                         name="file1"
                         type="file"
                         onChange={onChangeInput}
-                      
+ 
                 />
             </Label>
         </FormGroup>
@@ -70,10 +87,10 @@ function ThirdTab({ photos, setPhotos, nextButton, prevButton }) {
                  Prev
             </Button>
             
-             <Button color="primary" onClick={nextButton}>
+             <Button color="primary" onClick={onButtonNextCkick}>
                  Next
             </Button>
-          </Form>
+          </>
  
     )
 }

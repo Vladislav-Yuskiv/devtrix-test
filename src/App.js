@@ -1,31 +1,21 @@
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { useState } from "react";
-
 import FirstTab from './Components/FirstTab'
+import { Form , Button } from 'reactstrap'
 import SecondTab from './Components/SecondTab'
 import ThirdTab from './Components/ThirdTab'
 import ForthTab from './Components/ForthTab'
+import {  useDispatch } from 'react-redux';
+import formActions from './redux/form/form-actions'
+import store from './redux/store';
+
 
 function App() {
 
-   //FirstTab
-   const [headerText, setHeaderText] = useState('')
-   const [descriptionText, setDescription] = useState(' ')
-   const [status, setStatus] = useState('Off')
-  
-  //SecondTab
-   const [email, setEmail] = useState('')
-   const [phone, setPhone] = useState('')
-  
-  //ThirdTab
-  const [photos, setPhotos] = useState([])
-  
-  //ForthTab
-  const [paidServices , setServices] = useState([])
-
-  
   const [curretTab, setCurrentTab] = useState(1)
+
+  const dispatch = useDispatch();
 
   const nextTab = () => {
      setCurrentTab(curretTab + 1)
@@ -35,73 +25,45 @@ function App() {
     setCurrentTab(curretTab - 1)
   }
 
-  const saveButton = (e) => {
+  const submitButton = (e) => {
     e.preventDefault()
 
-    const FormData = {
-      header: headerText,
-      description: descriptionText,
-      status,
-      email,
-      phone,
-      photos,
-      paidServices 
-    }
+    const res = store.getState() 
 
-    console.log('FormData', FormData);
-    
+    console.log('FormData', res.FormData);
+
     reset()
+    
   }
 
   const reset = () => {
-    setHeaderText('')
-    setDescription('')
-    setStatus('Off')
-    setEmail('')
-    setPhone('')
-    setPhotos([])
-    setServices([])
+
+    dispatch(formActions.headerText(''))
+    dispatch(formActions.descriptionText(''))
+    dispatch(formActions.status('Off'))
+
+    dispatch(formActions.email(' '))
+    dispatch(formActions.phone(''))
+
+    dispatch(formActions.photos([]))
+
+    dispatch(formActions.paidServices([]))
+
     setCurrentTab(1)
 
   };
 
-   switch (curretTab) {
-      case 1 :
-       return <FirstTab headerText={headerText}
-                        setHeaderText={setHeaderText}
-                        descriptionText={descriptionText}
-                        setDescription={setDescription}
-                        status={status}
-                        setStatus={setStatus}
-                        nextButton={nextTab} />
-       
-      case 2 :
-       return <SecondTab
-                        email={email}
-                        setEmail={setEmail}
-                        phone={phone}
-                        setPhone={setPhone}
-                        nextButton={nextTab}
-                        prevButton={prevTab} />
-      
-      case 3 :
-       return <ThirdTab
-                        photos={photos}
-                        setPhotos={setPhotos}
-                        nextButton={nextTab}
-                        prevButton={prevTab}/>
-                  
-      case 4 :
-       return <ForthTab
-                      prevButton={prevTab}
-                      paidServices={paidServices}
-                      setServices={setServices}
-                      saveButton={saveButton}
-                              />
-      default:
-        return;
-    }
+  return(
+    <Form onSubmit={submitButton}>
+      { curretTab === 1 &&  <FirstTab  nextButton={nextTab} /> }
+      {curretTab === 2 &&  <SecondTab nextButton={nextTab}  prevButton={prevTab} />}
+      { curretTab === 3 &&  <ThirdTab  nextButton={nextTab} prevButton={prevTab}/> }
+      { curretTab === 4 && <ForthTab prevButton={prevTab} /> }
+      { curretTab === 4 && <Button color="info">Save</Button> }
 
+    </Form>
+  )
+  
 }
 
 export default App;

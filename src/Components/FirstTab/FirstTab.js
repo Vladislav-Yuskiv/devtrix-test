@@ -1,8 +1,33 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Form, Input, FormGroup, Label , Button } from 'reactstrap'
-import React  from "react"
+import {  Input, FormGroup, Label , Button } from 'reactstrap'
+import { useSelector, useDispatch } from 'react-redux';
+import { getHeader , getDescription , getStatus } from '../../redux/form/form-selectors'
+import formActions from '../../redux/form/form-actions'
+import React , { useEffect, useState } from "react"
 
-function FirstTab({headerText ,setHeaderText , descriptionText , setDescription , status , setStatus , nextButton}) {
+function FirstTab({ nextButton}) {
+
+
+  
+  const header = useSelector(getHeader)
+  const description = useSelector(getDescription)
+  const reduxStatus = useSelector(getStatus)
+
+  const [headerText, setHeaderText] = useState(header)
+  const [descriptionText, setDescription] = useState(description)
+  const [status, setStatus] = useState(reduxStatus)
+  const [checked , setChecked] = useState(false)
+
+  useEffect(()=>{
+
+    if( status=== 'On'){
+      setChecked(true)
+    }
+ 
+  }, [status])
+
+
+  const dispatch = useDispatch();
     
    const handleChange = (e) => {
     const { name, value } = e.currentTarget;
@@ -27,6 +52,10 @@ function FirstTab({headerText ,setHeaderText , descriptionText , setDescription 
       return alert('Header is requied')
     }
 
+    dispatch(formActions.headerText(headerText))
+    dispatch(formActions.descriptionText(descriptionText))
+    dispatch(formActions.status(status))
+
     nextButton()
   }
   
@@ -34,20 +63,22 @@ function FirstTab({headerText ,setHeaderText , descriptionText , setDescription 
     if (status === 'Off') {
 
        setStatus('On')
+       setChecked(true)
     }
     else {
        setStatus('Off')
+       setChecked(false)
     }
    
   }
 
     return (
-         <Form >
+         <>
 
       <FormGroup>
           <Label >
             Header
-            <Input className="mb-3" bsSize="sm" type="text"  value={headerText} name="header"  onChange={handleChange}/>
+            <Input className="mb-3" bsSize="sm" type="text" required value={headerText} name="header"  onChange={handleChange}/>
           </Label>
       </FormGroup>
         
@@ -65,7 +96,7 @@ function FirstTab({headerText ,setHeaderText , descriptionText , setDescription 
 
       <FormGroup check inline >
           <Label check>
-            <Input name='status' type="checkbox" onChange={handleChangeStatus}/>
+            <Input name='status' type="checkbox" checked={checked} onChange={handleChangeStatus}/>
             {status}
           </Label>
       </FormGroup>
@@ -73,7 +104,7 @@ function FirstTab({headerText ,setHeaderText , descriptionText , setDescription 
              <Button color="primary" onClick={handleButtonClick}>
                  Next
              </Button>
-    </Form>
+    </>
     )
 }
 export default FirstTab;
